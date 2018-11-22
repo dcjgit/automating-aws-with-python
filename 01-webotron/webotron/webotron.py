@@ -16,9 +16,10 @@ def list_buckets():
         print(bucket)
 
 @cli.command('list-bucket-objects')
-def list_bucket_objects():
+@click.argument('bucket')
+def list_bucket_objects(bucket):
     "List objects (files) in an s3 bucket"
-    for obj in s3.Bucket('automatingaws-dinesh-boto3').objects.all():
+    for obj in s3.Bucket(bucket).objects.all():
         print(obj)
 
 
