@@ -1,6 +1,7 @@
 import boto3
 import click
 from botocore.exceptions import ClientError   # for Exceptions
+from pathlib import Path
 
 #------------------------------------------------------------------------------
 session = boto3.Session(profile_name='devdj')
@@ -68,6 +69,33 @@ def setup_bucket(bucket):
             'Suffix': 'index.html'
        }
     })
+    return #end of the function
+#------------------------------------------------------------------------------
+
+#Uploads the file (key) in the directory path to the given s3 bucket
+def upload_file(s3_bucket, path, key):
+    s3_bucket.upload_file(
+        path,
+        key,
+        ExtraArgs={
+            'ContentType': 'text/html'
+        }
+    )
+
+@cli.command('sync')
+@click.argument('pathname', type=click.Path(exists=True))
+def sync(pathname):
+    "Sync contens of PATHNAME to BUCKET"
+    root = Path(pathname).expanduser().resolve()
+
+    def handle_directory(target):
+        for p in target.iterdir():
+            if p.is_dir():
+                handle_directory(p)
+            if p.is_file():
+                print("Path: {}\n Key: {}".format(p, p.relative_to(root)))
+
+    handle_directory(root)
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
