@@ -10,6 +10,7 @@ click = "*"
 [dev-packages]
 ipython = "*"
 pycodestyle = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.7"

@@ -12,12 +12,12 @@ Webotron automates the process of deploying static websites to AWS
 """
 
 from pathlib import Path
+import mimetypes
 
 import boto3
 from botocore.exceptions import ClientError   # for Exceptions
 
 import click
-import mimetypes
 
 # ------------------------------------------------------------------------------
 session = boto3.Session(profile_name='devdj')
@@ -28,7 +28,6 @@ s3 = session.resource('s3')
 @click.group()
 def cli():
     """Webotron deploys websites to AWS."""
-    pass
 
 
 @cli.command('list-buckets')
@@ -82,14 +81,13 @@ def setup_bucket(bucket):
 
     ws = s3_bucket.Website()
     ws.put(WebsiteConfiguration={
-       'ErrorDocument': {
+        'ErrorDocument': {
             'Key': 'error.html'
-       },
-       'IndexDocument': {
+        },
+        'IndexDocument': {
             'Suffix': 'index.html'
-       }
+        }
     })
-    return   # end of the function
 # ------------------------------------------------------------------------------
 
 
