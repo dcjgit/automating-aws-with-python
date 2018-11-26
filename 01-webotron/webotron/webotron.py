@@ -1,6 +1,7 @@
 #!/usr/bin/Python
 # -*- coding: utf-8 -*-
-"""Webotron: Deploy websites with AWS
+"""Webotron: Deploy websites with AWS.
+
 Webotron automates the process of deploying static websites to AWS
 - Configure AWS s3 list_buckets
     - Create them
@@ -26,13 +27,13 @@ s3 = session.resource('s3')
 # ------------------------------------------------------------------------------
 @click.group()
 def cli():
-    """Webotron deploys websites to AWS"""
+    """Webotron deploys websites to AWS."""
     pass
 
 
 @cli.command('list-buckets')
 def list_buckets():
-    """List all s3 buckets"""
+    """List all s3 buckets."""
     for bucket in s3.buckets.all():
         print(bucket)
 
@@ -40,7 +41,7 @@ def list_buckets():
 @cli.command('list-bucket-objects')
 @click.argument('bucket')
 def list_bucket_objects(bucket):
-    "List objects (files) in an s3 bucket"
+    """List objects (files) in an s3 bucket."""
     for obj in s3.Bucket(bucket).objects.all():
         print(obj)
 
@@ -48,7 +49,7 @@ def list_bucket_objects(bucket):
 @cli.command('setup-bucket')
 @click.argument('bucket')
 def setup_bucket(bucket):
-    """Create and configure S3 bucket"""
+    """Create and configure S3 bucket."""
     try:
         s3_bucket = s3.create_bucket(
             Bucket=bucket,
@@ -92,8 +93,8 @@ def setup_bucket(bucket):
 # ------------------------------------------------------------------------------
 
 
-# Uploads the file (key) in the directory path to the given s3 bucket
 def upload_file(s3_bucket, path, key):
+    """Upload the file (key) in the directory (path) to the S3 bucket."""
     content_type = mimetypes.guess_type(key)[0] or 'text/plain'
     # Try this in ipython
     # import mimetypes
@@ -112,7 +113,7 @@ def upload_file(s3_bucket, path, key):
 @click.argument('pathname', type=click.Path(exists=True))
 @click.argument('bucket')
 def sync(pathname, bucket):
-    """Sync contens of PATHNAME to BUCKET"""
+    """Sync contens of PATHNAME to BUCKET."""
     s3_bucket = s3.Bucket(bucket)   # refers to the bucket in S3
 
     root = Path(pathname).expanduser().resolve()
